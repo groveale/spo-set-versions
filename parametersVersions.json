@@ -30,5 +30,9 @@
     "deleteOldMajorVersions": {
         "Value": true,
         "Description": "If true, item versions that are less than the count will be removed."
+    },
+    "sendToRecycleBin": {
+        "Value": true,
+        "Description": "If true, items are deleted before library version config is set so items go into recycle bin and can be restored"
     }
 }

@@ -91,6 +91,9 @@ function SetLibraryVersionConfig($site, $lib, $siteId) {
     $enableMajorVersions = $majorVersionCount -gt 0
     $enableMinorVersions = $minorVersionCount -gt 0
 
+
+
+
     if(!$parameters.whatIfMode.Value)
     {
         try {
@@ -103,13 +106,18 @@ function SetLibraryVersionConfig($site, $lib, $siteId) {
         }
     }
 
+
     if($parameters.deleteOldMajorVersions.Value)
     {
-        # Delete versions PnP
-        #DeleteOldMajorVersions $lib $majorVersionCount
-
-        # Delete Versions MSGraph
-        DeleteOldMajorVersionsGraph $lib $majorVersionCount $siteId
+        if ($parameters.sendToRecycleBin.Value)
+        {
+            # Delete versions PnP (sends to recycle bin) (slower)
+            DeleteOldMajorVersions $lib $majorVersionCount
+        }
+        else {
+            # Delete Versions MSGraph
+            DeleteOldMajorVersionsGraph $lib $majorVersionCount $siteId
+        }
     }
 }
 
@@ -140,7 +148,7 @@ function DeleteOldMajorVersions($docLib,$majorVersionCount)
                 foreach ($version in $outdatedVersions) 
                 {
                     $global:versionSize += $version.Size
-                    Remove-PnPFileVersion -Url $item.FieldValues.FileRef -Identity $version.Id -Force
+                    Remove-PnPFileVersion -Url $item.FieldValues.FileRef -Identity $version.Id -Force -Recycle
                     #Write-Host "    Removing version, $($version.VersionLabel)" -ForegroundColor DarkMagenta
                 }
                 Write-Host "    Removed $(@($outdatedVersions).Length) versions" -ForegroundColor DarkMagenta
