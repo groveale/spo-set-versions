@@ -135,7 +135,7 @@ function DeleteOldMajorVersions($docLib,$majorVersionCount)
 
         if (@($versionHistory).Length -gt $majorVersionCount)
         {
-            $outdatedVersions = $versionHistory | sort VersionLabel -Descending | select -Skip $majorVersionCount
+            $outdatedVersions = $versionHistory | sort Created -Descending | select -Skip $majorVersionCount
             Write-Host "   $(@($outdatedVersions).Length) versions to remove, from $($item.FieldValues.FileRef)" -ForegroundColor Magenta
 
             if($parameters.whatIfMode.Value)
