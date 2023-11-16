@@ -8,7 +8,7 @@
         "Description": "Client Id of the SetLibraryVersion AAD application. Must have Sites.FullControl or Sites.Selected for sites to be processed. Both MSGraph and SharePoint APIs"
     },
     "thumbprint" : {
-        "Value": "46EF268F89C9B78E023D9927013413FE77553119",
+        "Value": "72A385EF67B35E1DFBACA89180B7B3C8F97453D7",
         "Description": "Thumbprint of the certific from the device running Set Version script."
     },
     "inputCSV": {
@@ -24,12 +24,12 @@
         "Description": "Numner of minor versions to configure on the Libraries (0 will disable minor versions)"
     },
     "whatIfMode": {
-        "Value": false,
+        "Value": true,
         "Description": "If true, storage saving will be calculated but files won't be deleted."
     },
     "deleteOldMajorVersions": {
         "Value": true,
-        "Description": "If true, item versions that are less than the count will be removed."
+        "Description": "If true, item versions that are less than the count will be removed. So no storage saving immediately"
     },
     "sendToRecycleBin": {
         "Value": true,

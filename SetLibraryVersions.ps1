@@ -253,5 +253,5 @@ if($continue.ToLowerInvariant() -eq "y")
     
     $stopwatch.Stop()
     
-    $stopwatch.Elapsed.TotalMinutes
+    Write-Host "Total Minutes: $($stopwatch.Elapsed.TotalMinutes)"
 }
