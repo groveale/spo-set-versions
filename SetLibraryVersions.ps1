@@ -28,7 +28,7 @@ function ProcessSites($sites) {
             continue
         }
         
-        $docLibs = GetLibrariesInSite $site$site.SiteUrl
+        $docLibs = GetLibrariesInSite
 
         foreach($lib in $docLibs)
         {
@@ -44,7 +44,7 @@ function ProcessSites($sites) {
             Connect-PnPOnline -Url $sub.Url -ClientId $parameters.clientId.Value -Tenant $parameters.tenantId.Value -Thumbprint $parameters.thumbprint.Value
             Write-Host " Processing Site: $($sub.Url)" -ForegroundColor DarkGray
 
-            $docLibs = GetLibrariesInSite $sub
+            $docLibs = GetLibrariesInSite
 
             foreach($lib in $docLibs)
             {
@@ -67,7 +67,7 @@ function ProcessSites($sites) {
 }
 
 
-function GetLibrariesInSite($site) {
+function GetLibrariesInSite() {
 
     ## Get doc libs (that aren't system lists)
     $docLibs = Get-PnPList -Includes IsSystemList, Fields | Where { ($_.BaseType -eq "DocumentLibrary" ) -and !($_.IsSystemList) -and ($_.Title -ne "Site Pages")}
@@ -94,7 +94,7 @@ function SetLibraryVersionConfig($site, $lib, $siteId) {
 
 
 
-    if(!$parameters.whatIfMode.Value)
+    if(!$parameters.whatIfMode.Value -and !$parameters.useDateExpiration.Value)
     {
         try {
             # Set Versions
@@ -181,10 +181,18 @@ function GetChildrensChildren($children, $driveId, $majorVersionCount)
             # don't forget versions
             $versionHistory = Get-MgDriveItemVersion -DriveId $driveId -DriveItemId $child.Id -Property "Id, LastModifiedDateTime, Size" -All
 
+            # Are we using dates or counts
+
             $majorVersionPlus1 = [int]($majorVersionCount) + 1
-            if (@($versionHistory).Length -gt $majorVersionPlus1)
+            if (@($versionHistory).Length -gt $majorVersionPlus1 -or $parameters.useDateExpiration.Value)
             {
-                $outdatedVersions = $versionHistory | sort LastModifiedDateTime -Descending | select -Skip $majorVersionPlus1
+                if ($parameters.useDateExpiration.Value) {
+                    ## get versions that have been before cut off date (we need to skip 1 i.e. the current version)
+                    $outdatedVersions = $versionHistory | sort LastModifiedDateTime -Descending | select -Skip 1 | where { $_.LastModifiedDateTime -lt $parameters.useDateExpiration.Value } 
+                } else {
+                    $outdatedVersions = $versionHistory | sort LastModifiedDateTime -Descending | select -Skip $majorVersionPlus1
+                }
+                
                 Write-Host "   $(@($outdatedVersions).Length) versions to remove, from $($child.Id)" -ForegroundColor Magenta
 
                 if($parameters.whatIfMode.Value)
@@ -228,6 +236,18 @@ if($parameters.whatIfMode.Value)
 } 
 else {
     Write-Host "RUNNING IN CONFIGURE & DELETE MODE - Library versions will be configured, and previous versions will be deleted" -ForegroundColor Red
+    Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
+}
+
+if($parameters.useDateExpiration.Value)
+{
+    Write-Host
+    Write-Host "Using date expiration, library versions won't be configured but versions with a LastModifiedDateTime before $($parameters.useDateExpiration.Value)" -ForegroundColor Green
+    Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
+} 
+else {
+    Write-Host
+    Write-Host "Using count expiration, library versions will be configured and previous versions higher than the count limit will be inlcuded in the clean up" -ForegroundColor Green
     Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
 }
 

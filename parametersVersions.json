@@ -9,7 +9,7 @@
     },
     "thumbprint" : {
         "Value": "72A385EF67B35E1DFBACA89180B7B3C8F97453D7",
-        "Description": "Thumbprint of the certific from the device running Set Version script."
+        "Description": "Thumbprint of the certificate from the device running Set Version script."
     },
     "inputCSV": {
         "Value": "./SitesToProcess.csv",
@@ -17,11 +17,19 @@
     },
     "majorVersionCount": {
         "Value": "52",
-        "Description": "Numner of major versions to configure on the Libraries (0 will disable major versions)"
+        "Description": "Number of major versions to configure on the Libraries (0 will disable major versions)"
     },
     "minorVersionCount": {
         "Value": "0",
-        "Description": "Numner of minor versions to configure on the Libraries (0 will disable minor versions)"
+        "Description": "Number of minor versions to configure on the Libraries (0 will disable minor versions)"
+    },
+    "previousVersionExpireDate": {
+        "Value": "2022-02-28T15:00:00Z",
+        "Description": "Date to keep previous version from"
+    },
+    "useDateExpiration": {
+        "Value": true,
+        "Description": "By default version counts are used to remove - setting this to true will use dates instead of version counts"
     },
     "whatIfMode": {
         "Value": true,
