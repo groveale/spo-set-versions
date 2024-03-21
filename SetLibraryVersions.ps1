@@ -239,17 +239,17 @@ else {
     Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
 }
 
-if($parameters.useDateExpiration.Value)
-{
-    Write-Host
-    Write-Host "Using date expiration, library versions won't be configured but versions with a LastModifiedDateTime before $($parameters.useDateExpiration.Value)" -ForegroundColor Green
-    Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
-} 
-else {
-    Write-Host
-    Write-Host "Using count expiration, library versions will be configured and previous versions higher than the count limit will be inlcuded in the clean up" -ForegroundColor Green
-    Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
-}
+# if($parameters.useDateExpiration.Value)
+# {
+#     Write-Host
+#     Write-Host "Using date expiration, library versions won't be configured but versions with a LastModifiedDateTime before $($parameters.useDateExpiration.Value)" -ForegroundColor Green
+#     Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
+# } 
+# else {
+#     Write-Host
+#     Write-Host "Using count expiration, library versions will be configured and previous versions higher than the count limit will be inlcuded in the clean up" -ForegroundColor Green
+#     Write-Host "Press [Y]es to continue" -ForegroundColor Cyan
+# }
 
 $continue = Read-Host
 
